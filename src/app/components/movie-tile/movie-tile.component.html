@@ -1,0 +1,18 @@
+<div class="upper-container">
+  <fa-icon [icon]="faWatched" (click)="onWatchedClick()"></fa-icon>
+  <fa-icon [icon]="faFav" (click)="onFavClick()"></fa-icon>
+</div>
+<div class="bottom-container">
+  <div class="movie-thumb-container">
+    <img [src]="ImageUrl" alt="thumbnail" class="movie-thumbnail" />
+  </div>
+  <div class="stars-container">
+    <ng-container *ngFor="let rating of ratings">
+      <mat-icon>
+        {{
+          rating === 1 ? "star" : rating === 0.5 ? "star_half" : "star_border"
+        }}
+      </mat-icon>
+    </ng-container>
+  </div>
+</div>

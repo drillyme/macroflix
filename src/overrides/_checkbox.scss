@@ -1,0 +1,40 @@
+body {
+  --checkbox-primary-bg-color: #ffffff !important;
+}
+
+.mat-checkbox {
+  margin-right: 7px !important;
+}
+// overwrite checkbox-primary-bg-color
+.mat-checkbox-background {
+  background-color: white !important;
+}
+
+// overwrite the checkbox background
+.mat-checkbox-checked .mat-checkbox-background,
+.mat-checkbox-indeterminate .mat-checkbox-background {
+  background-color: var(--checkbox-primary-bg-color) !important;
+}
+
+// overwrite the checkbox border
+.mat-checkbox-checked .mat-checkbox-inner-container,
+.mat-checkbox-indeterminate .mat-checkbox-inner-container {
+  border: 1px solid blue !important;
+}
+
+// overwrite the ripple overlay on hover and click
+.mat-checkbox:not(.mat-checkbox-disabled)
+  .mat-checkbox-ripple
+  .mat-ripple-element {
+  background-color: black !important;
+}
+
+.mat-checkbox-checkmark-path {
+  font-weight: 600;
+  stroke: blue !important;
+}
+
+.watched .mat-checkbox-background,
+.mat-checkbox-frame {
+  border-radius: 70% !important;
+}

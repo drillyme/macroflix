@@ -1,0 +1,20 @@
+<h3 class="content-type">Movies <span>(21)</span></h3>
+<div class="main-container">
+  <app-sidebar></app-sidebar>
+  <div class="movies">
+    <ng-container *ngFor="let movie of movies">
+      <div class="movie">
+        <app-movie-tile
+          [id]="movie.id"
+          [ImageUrl]="movie.poster"
+          [ratings]="movie.ratings"
+          [isWatched]="movie.isWatched"
+          [isFav]="movie.isFav"
+          (favClick)="onFavClick(movie)"
+          (watchedClick)="onWatchedClick(movie)"
+        >
+        </app-movie-tile>
+      </div>
+    </ng-container>
+  </div>
+</div>

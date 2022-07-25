@@ -1,0 +1,30 @@
+.upper-container {
+  display: flex;
+  justify-content: space-between;
+
+  & fa-icon {
+    & ::ng-deep {
+      .svg-inline--fa {
+        width: 40px;
+        height: 20px;
+        margin-top: 5px;
+      }
+    }
+  }
+}
+
+.movie-thumb-container {
+  text-align: center;
+  img {
+    border-radius: 10px;
+    width: 82%;
+    height: 75%;
+  }
+}
+
+.stars-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px 16px;
+}
