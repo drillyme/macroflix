@@ -22,7 +22,6 @@
 }
 
 .movie {
-  background-color: #049452;
   padding: 3px 5px;
   border-radius: 15px;
   margin: 20px;
@@ -61,4 +60,20 @@
 
 .movie:hover {
   transform: scale(1.1);
+}
+
+.state1 {
+  background-color: #049452;
+}
+
+.state2 {
+  background-color: #ed6606;
+}
+
+.state3 {
+  background-color: #e8e8e8;
+}
+
+.state4 {
+  background-color: #eec907;
 }

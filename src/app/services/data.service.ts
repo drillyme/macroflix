@@ -10,14 +10,13 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   providedIn: 'root',
 })
 export class DataService {
-  public result: any;
   private baseApiUrl = AppConstants.tmdbUrl;
 
   constructor(private http: HttpClient) {}
 
   public getMovies(): Observable<any> {
     return this.http.get(
-      this.baseApiUrl + `/trending/all/week?api_key=${environment.apiKey}`,
+      this.baseApiUrl + `/trending/all/day?api_key=${environment.apiKey}`,
       { headers }
     );
   }

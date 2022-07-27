@@ -1,6 +1,6 @@
-import { AppConstants } from './../../app.constant';
-import { DataService } from './../../services/data.service';
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../../services/data.service';
+import { AppConstants } from '../../app.constant';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
       );
       this.watchedMovies = this.movies.filter((m: any) => m.isWatched);
     }
+    console.log(this.movies);
   }
 
   getMovies() {
@@ -58,13 +59,12 @@ export class HomeComponent implements OnInit {
             ratings: ratingsArray,
             releaseYear: String(movie.release_date).substring(0, 4),
             type: movie.media_type,
-            isFav: false,
             isWatched: false,
+            isFav: false,
           };
 
           return splicedMovies;
         });
-        console.log(this.movies[0].poster);
       },
       error: (error) => {
         console.log(error);
@@ -72,6 +72,59 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onFavClick(movie: any) {}
-  onWatchedClick(movie: any) {}
+  getClassOfMovie(movie: any) {
+    if (movie.isWatched && movie.isFav) {
+      return 'state1';
+    } else if (!movie.isWatched && movie.isFav) {
+      return 'state2';
+    } else if (!movie.isWatched && !movie.isFav) {
+      return 'state3';
+    } else {
+      return 'state4';
+    }
+  }
+
+  onFavClick(movie: any) {
+    movie.isFav = !movie.isFav;
+    movie.isWatched = movie.isFav ? true : movie.isWatched;
+    if (movie.isWatched) {
+      const alreadyWatched = this.watchedMovies.find(
+        (m: any) => m.id === movie.id
+      );
+      if (alreadyWatched) {
+        alreadyWatched.isFav = movie.isFav;
+        this.watchedMovies = this.watchedMovies.map((m: any) => {
+          if (m.id === movie.id) {
+            return movie;
+          }
+          return m;
+        });
+      } else {
+        this.watchedMovies.push(movie);
+      }
+      this.yetToWatchMovies = this.yetToWatchMovies.filter(
+        (m: any) => m.id !== movie.id
+      );
+    } else {
+      this.watchedMovies = this.watchedMovies.filter(
+        (m: any) => m.id !== movie.id
+      );
+      this.yetToWatchMovies.push(movie);
+    }
+  }
+  onWatchedClick(movie: any) {
+    movie.isWatched = !movie.isWatched;
+    movie.isFav = movie.isWatched ? movie.isFav : false;
+    if (movie.isWatched) {
+      this.watchedMovies.push(movie);
+      this.yetToWatchMovies = this.yetToWatchMovies.filter(
+        (m: any) => m.id !== movie.id
+      );
+    } else {
+      this.yetToWatchMovies.push(movie);
+      this.watchedMovies = this.watchedMovies.filter(
+        (m: any) => m.id !== movie.id
+      );
+    }
+  }
 }
