@@ -42,4 +42,4 @@ testem.log
 Thumbs.db
 
 #Api Keys
-/src/enviroments
+/src/environments/**
