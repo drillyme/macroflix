@@ -20,4 +20,18 @@ export class DataService {
       { headers }
     );
   }
+
+  public getMovieGenres(): Observable<any> {
+    return this.http.get<any>(
+      this.baseApiUrl + `/genre/movie/list?api_key=${environment.apiKey}`,
+      { headers }
+    );
+  }
+
+  public getSeriesGenres(): Observable<any> {
+    return this.http.get<any>(
+      this.baseApiUrl + `/genre/tv/list?api_key=${environment.apiKey}`,
+      { headers }
+    );
+  }
 }

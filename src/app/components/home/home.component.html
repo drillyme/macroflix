@@ -2,7 +2,7 @@
   Movies <span>({{ movies.length }})</span>
 </h3>
 <div class="main-container">
-  <app-sidebar></app-sidebar>
+  <app-sidebar [movies]="movies"></app-sidebar>
   <div class="movies">
     <ng-container *ngFor="let movie of movies">
       <div class="movie" [ngClass]="getClassOfMovie(movie)">

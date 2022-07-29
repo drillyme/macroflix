@@ -16,11 +16,11 @@
       </mat-expansion-panel-header>
       <div class="input-group">
         <mat-checkbox checked="true" class="example-margin"></mat-checkbox>
-        <label for="">Movie(21)</label>
+        <label for="">Movie({{ this.moviesSize }})</label>
       </div>
       <div class="input-group">
         <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for="">Series(1)</label>
+        <label for="">Series({{ this.seriesSize }})</label>
       </div>
     </mat-expansion-panel>
     <mat-expansion-panel expanded="true">
@@ -89,18 +89,16 @@
         <label for=""></label>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel expanded="true">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration"> Genre </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for=""> Action (7) </label>
-      </div>
-      <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for=""> Adventure (3) </label>
-      </div>
+      <ng-container *ngFor="let genre of genres">
+        <div class="input-group">
+          <mat-checkbox class="example-margin"></mat-checkbox>
+          <label for=""> {{ genre.name }} ({{ genre.size }}) </label>
+        </div>
+      </ng-container>
     </mat-expansion-panel>
     <mat-expansion-panel expanded="true">
       <mat-expansion-panel-header>

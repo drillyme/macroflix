@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { AppConstants } from '../../app.constant';
+import { genre } from 'src/app/model/genres';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,8 @@ export class HomeComponent implements OnInit {
   yetToWatchMovies: any = [];
   watchedMovies: any = [];
   imageUrl = AppConstants.tmdbImage300;
+  movieSize: number = 0;
+  seriesSize: number = 0;
 
   constructor(private dataService: DataService) {}
 
@@ -26,7 +29,6 @@ export class HomeComponent implements OnInit {
       );
       this.watchedMovies = this.movies.filter((m: any) => m.isWatched);
     }
-    console.log(this.movies);
   }
 
   getMovies() {
