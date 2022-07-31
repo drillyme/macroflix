@@ -10,6 +10,7 @@ import { genre } from 'src/app/model/genres';
 })
 export class HomeComponent implements OnInit {
   movies: any = [];
+  series: any = [];
   yetToWatchMovies: any = [];
   watchedMovies: any = [];
   imageUrl = AppConstants.tmdbImage300;
@@ -19,7 +20,7 @@ export class HomeComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.getMovies();
+    this.getMoviesAndSeries();
   }
 
   ngDoCheck(): void {
@@ -31,8 +32,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getMovies() {
-    this.dataService.getMovies().subscribe({
+  getMoviesAndSeries() {
+    this.dataService.getData('movie').subscribe({
       next: (result) => {
         let data = result.results;
         this.movies = data.map((movie: any) => {
@@ -60,12 +61,52 @@ export class HomeComponent implements OnInit {
             poster: `${this.imageUrl}${movie.poster_path}`,
             ratings: ratingsArray,
             releaseYear: String(movie.release_date).substring(0, 4),
-            type: movie.media_type,
+            type: 'movie',
             isWatched: false,
             isFav: false,
           };
 
           return splicedMovies;
+        });
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+    this.dataService.getData('tv').subscribe({
+      next: (result) => {
+        let data = result.results;
+        this.series = data.map((movie: any) => {
+          var ratingsArray = Array.apply(null, Array(5).fill(0));
+          let i;
+          for (i = 0; i < Math.floor(movie.vote_average / 2); i++) {
+            ratingsArray[i] = 1;
+          }
+          let x = movie.vote_average / 2;
+          let y = Math.floor(movie.vote_average / 2);
+          if (x - y > 0) {
+            if (x - y <= 0.25) {
+              ratingsArray[i] = 0;
+            } else if (x - y > 0.25 && x - y <= 0.75) {
+              ratingsArray[i] = 0.5;
+            } else {
+              ratingsArray[i] = 1;
+            }
+          }
+
+          const splicedSeries = {
+            id: movie.id,
+            genreIds: [...movie.genre_ids],
+            title: movie.name,
+            poster: `${this.imageUrl}${movie.poster_path}`,
+            ratings: ratingsArray,
+            releaseYear: String(movie.first_air_date).substring(0, 4),
+            type: 'tv',
+            isWatched: false,
+            isFav: false,
+          };
+
+          return splicedSeries;
         });
       },
       error: (error) => {

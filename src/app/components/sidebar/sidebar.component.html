@@ -23,18 +23,16 @@
         <label for="">Series({{ this.seriesSize }})</label>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel expanded="true">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration"> Year </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for="">1939(1)</label>
-      </div>
-      <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for="">1954(1)</label>
-      </div>
+      <ng-container *ngFor="let year of year">
+        <div class="input-group">
+          <mat-checkbox class="example-margin"></mat-checkbox>
+          <label for="">{{ year }}</label>
+        </div>
+      </ng-container>
     </mat-expansion-panel>
     <mat-expansion-panel expanded="true" disabled="true">
       <mat-expansion-panel-header>
@@ -96,37 +94,33 @@
       <ng-container *ngFor="let genre of genres">
         <div class="input-group">
           <mat-checkbox class="example-margin"></mat-checkbox>
-          <label for=""> {{ genre.name }} ({{ genre.size }}) </label>
+          <label for=""> {{ genre.name }} </label>
         </div>
       </ng-container>
     </mat-expansion-panel>
-    <mat-expansion-panel expanded="true">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration"> Actors </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for=""> Adam Sandler (2) </label>
-      </div>
-      <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for=""> Al Pacino (1) </label>
-      </div>
+      <ng-container *ngFor="let actor of actors">
+        <div class="input-group">
+          <mat-checkbox class="example-margin"></mat-checkbox>
+          <label for=""> {{ actor }}</label>
+        </div>
+      </ng-container>
     </mat-expansion-panel>
-    <mat-expansion-panel expanded="true">
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration">
           Directors
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for=""> Akira Kurosawa (1) </label>
-      </div>
-      <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for=""> Billy Wilder (1) </label>
-      </div>
+      <ng-container *ngFor="let director of directors">
+        <div class="input-group">
+          <mat-checkbox class="example-margin"></mat-checkbox>
+          <label for=""> {{ director }} </label>
+        </div>
+      </ng-container>
     </mat-expansion-panel>
   </mat-sidenav>
   <!-- </div> -->

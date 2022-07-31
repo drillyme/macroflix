@@ -1,8 +1,8 @@
 <h3 class="content-type">
-  Movies <span>({{ movies.length }})</span>
+  Movies <span>({{ movies.length + series.length }})</span>
 </h3>
 <div class="main-container">
-  <app-sidebar [movies]="movies"></app-sidebar>
+  <app-sidebar [movies]="movies" [series]="series"></app-sidebar>
   <div class="movies">
     <ng-container *ngFor="let movie of movies">
       <div class="movie" [ngClass]="getClassOfMovie(movie)">
@@ -14,6 +14,20 @@
           [isFav]="movie.isFav"
           (favClick)="onFavClick(movie)"
           (watchedClick)="onWatchedClick(movie)"
+        >
+        </app-movie-tile>
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let serie of series">
+      <div class="movie" [ngClass]="getClassOfMovie(serie)">
+        <app-movie-tile
+          [id]="serie.id"
+          [ImageUrl]="serie.poster"
+          [ratings]="serie.ratings"
+          [isWatched]="serie.isWatched"
+          [isFav]="serie.isFav"
+          (favClick)="onFavClick(serie)"
+          (watchedClick)="onWatchedClick(serie)"
         >
         </app-movie-tile>
       </div>

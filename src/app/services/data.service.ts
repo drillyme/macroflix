@@ -14,23 +14,25 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  public getMovies(): Observable<any> {
+  public getData(type: string): Observable<any> {
     return this.http.get(
-      this.baseApiUrl + `/trending/all/day?api_key=${environment.apiKey}`,
+      this.baseApiUrl +
+        `discover/${type}?api_key=${environment.apiKey}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`,
       { headers }
     );
   }
 
-  public getMovieGenres(): Observable<any> {
+  public getGenres(type: string): Observable<any> {
     return this.http.get<any>(
-      this.baseApiUrl + `/genre/movie/list?api_key=${environment.apiKey}`,
+      this.baseApiUrl + `genre/${type}/list?api_key=${environment.apiKey}`,
       { headers }
     );
   }
 
-  public getSeriesGenres(): Observable<any> {
+  public getDetails(type: string, id: string): Observable<any> {
     return this.http.get<any>(
-      this.baseApiUrl + `/genre/tv/list?api_key=${environment.apiKey}`,
+      this.baseApiUrl +
+        `/${type}/${id}//credits?api_key=${environment.apiKey}&language=en-US`,
       { headers }
     );
   }
