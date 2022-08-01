@@ -1,8 +1,15 @@
 <h3 class="content-type">
   Movies <span>({{ movies.length + series.length }})</span>
 </h3>
+<div class="arrow-down" (click)="arrowDown()">
+  <img src="assets/images/down-arrow.png" alt="Arrow Down" />
+</div>
 <div class="main-container">
-  <app-sidebar [movies]="movies" [series]="series"></app-sidebar>
+  <app-sidebar
+    [movies]="movies"
+    [series]="series"
+    [toggleSidebar]="sidebarToggle"
+  ></app-sidebar>
   <div class="movies">
     <ng-container *ngFor="let movie of movies">
       <div class="movie" [ngClass]="getClassOfMovie(movie)">

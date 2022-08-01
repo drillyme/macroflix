@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
   movieSize: number = 0;
   seriesSize: number = 0;
 
+  sidebarToggle: boolean = false;
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -169,5 +171,9 @@ export class HomeComponent implements OnInit {
         (m: any) => m.id !== movie.id
       );
     }
+  }
+
+  arrowDown() {
+    this.sidebarToggle = !this.sidebarToggle;
   }
 }

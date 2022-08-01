@@ -17,6 +17,15 @@ export class SidebarComponent implements OnInit {
   moviesSize: number = 0;
   seriesSize: number = 0;
 
+  @Input() toggleSidebar: boolean = false;
+
+  isMobileWidth: boolean =
+    (window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth) < 480
+      ? true
+      : false;
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -27,6 +36,12 @@ export class SidebarComponent implements OnInit {
     this.moviesSize = this.movies.length;
     this.seriesSize = this.series.length;
     this.genres = this.uniqBykeepLast(this.genres, (it: any) => it.id);
+    this.isMobileWidth =
+      (window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth) < 480
+        ? true
+        : false;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -120,8 +135,6 @@ export class SidebarComponent implements OnInit {
               crew.known_for_department === 'Directing' &&
               crew.popularity >= 4
             ) {
-              console.log(crew);
-
               this.directors.add(crew.name);
             }
           });
@@ -140,7 +153,6 @@ export class SidebarComponent implements OnInit {
               crew.known_for_department === 'Directing' &&
               crew.popularity >= 4
             ) {
-              console.log(crew);
               this.directors.add(crew.name);
             }
           });
@@ -150,5 +162,8 @@ export class SidebarComponent implements OnInit {
         },
       });
     });
+  }
+  closeFitlers() {
+    this.toggleSidebar = !this.toggleSidebar;
   }
 }

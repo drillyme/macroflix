@@ -1,4 +1,4 @@
-<div class="sidebar">
+<div class="sidebar" [ngClass]="{ open: toggleSidebar }">
   <mat-sidenav
     mode="side"
     opened
@@ -8,9 +8,17 @@
     opened
   >
     <mat-panel-title class="filter">
+      <button mat-button class="menu-button" (click)="closeFitlers()">
+        Close Filters
+      </button>
+    </mat-panel-title>
+    <mat-panel-title class="filter">
       <button mat-button class="menu-button">Reset Filters</button>
     </mat-panel-title>
-    <mat-expansion-panel expanded="true" disabled="true">
+    <mat-expansion-panel
+      [expanded]="!isMobileWidth"
+      [disabled]="!isMobileWidth"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration"> Type </mat-panel-title>
       </mat-expansion-panel-header>
@@ -34,7 +42,10 @@
         </div>
       </ng-container>
     </mat-expansion-panel>
-    <mat-expansion-panel expanded="true" disabled="true">
+    <mat-expansion-panel
+      [expanded]="!isMobileWidth"
+      [disabled]="!isMobileWidth"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration">
           MetaScore
@@ -57,7 +68,10 @@
         <label for="">> 90 (5)</label>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel expanded="true" disabled="true">
+    <mat-expansion-panel
+      [expanded]="!isMobileWidth"
+      [disabled]="!isMobileWidth"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration">
           Watched
@@ -72,7 +86,10 @@
         <label for=""></label>
       </div>
     </mat-expansion-panel>
-    <mat-expansion-panel expanded="true" disabled="true">
+    <mat-expansion-panel
+      [expanded]="!isMobileWidth"
+      [disabled]="!isMobileWidth"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration">
           Saved <span>(in watch list)</span>

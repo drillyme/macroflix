@@ -15,6 +15,14 @@
     margin-left: 4px;
   }
 }
+
+.arrow-down img {
+  cursor: pointer;
+  display: none;
+  position: relative;
+  width: 100%;
+}
+
 .movies {
   display: flex;
   flex-wrap: wrap;
@@ -76,4 +84,13 @@
 
 .state4 {
   background-color: #eec907;
+}
+
+@media (max-width: 480px) {
+  .content-type {
+    display: none;
+  }
+  .arrow-down img {
+    display: block;
+  }
 }
