@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 
 @Component({
@@ -26,10 +27,13 @@ export class SidebarComponent implements OnInit {
       ? true
       : false;
 
+  filterForm!: FormGroup;
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.getGenre();
+    this.filterForm = this.dataService.filterForm;
   }
 
   ngDoCheck(): void {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { AppConstants } from '../../app.constant';
-import { genre } from 'src/app/model/genres';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -19,12 +19,27 @@ export class HomeComponent implements OnInit {
 
   sidebarToggle: boolean = false;
 
+  filterForm!: FormGroup;
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.getMoviesAndSeries();
+    this.filterMovies();
   }
 
+  private filterMovies() {
+    this.dataService.filterForm.valueChanges.subscribe(data=> {
+      console.log(data);
+      // TODO: write your logic for filtering the movies array.
+      // prefer to make seperate movie card component
+    })
+  }
+
+  /**
+   * TODO: why u are using do check ?
+   * it will impact performance, use another lifecycle hook
+   */
   ngDoCheck(): void {
     if (this.movies.length && !this.watchedMovies.length) {
       this.yetToWatchMovies = this.movies.filter(
@@ -34,6 +49,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * TODO: move tranformation code in the service using pipe(map())
+   */
   getMoviesAndSeries() {
     this.dataService.getData('movie').subscribe({
       next: (result) => {
