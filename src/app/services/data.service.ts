@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AppConstants } from '../app.constant';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -11,6 +12,12 @@ const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 })
 export class DataService {
   private baseApiUrl = AppConstants.tmdbUrl;
+
+  // TODO: add more dynamic controls or formArray
+  filterForm = new FormGroup({
+    movie : new FormControl(true),
+    series: new FormControl(true)
+  })
 
   constructor(private http: HttpClient) {}
 
