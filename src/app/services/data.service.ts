@@ -15,9 +15,17 @@ export class DataService {
 
   // TODO: add more dynamic controls or formArray
   filterForm = new FormGroup({
-    movie : new FormControl(true),
-    series: new FormControl(true)
-  })
+    movie: new FormControl(true),
+    series: new FormControl(true),
+    watched: new FormControl(true),
+    notWatched: new FormControl(true),
+    ratingsArray: new FormGroup({
+      ratingLess60: new FormControl(false),
+      rating60To80: new FormControl(false),
+      rating80To90: new FormControl(false),
+      ratingMore90: new FormControl(false),
+    }),
+  });
 
   constructor(private http: HttpClient) {}
 

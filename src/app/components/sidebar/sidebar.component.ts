@@ -11,9 +11,9 @@ export class SidebarComponent implements OnInit {
   @Input() movies: any = [];
   @Input() series: any = [];
   genres: any = [];
-  year: Set<String> = new Set();
-  actors: Set<String> = new Set();
-  directors: Set<String> = new Set();
+  years: any = [];
+  actors: any = [];
+  directors: any = [];
 
   moviesSize: number = 0;
   seriesSize: number = 0;
@@ -40,6 +40,10 @@ export class SidebarComponent implements OnInit {
     this.moviesSize = this.movies.length;
     this.seriesSize = this.series.length;
     this.genres = this.uniqBykeepLast(this.genres, (it: any) => it.id);
+    this.years = this.uniqBykeepLast(this.years, (it: any) => it.year);
+    this.actors = this.uniqBykeepLast(this.actors, (it: any) => it.id);
+    this.directors = this.uniqBykeepLast(this.directors, (it: any) => it.id);
+
     this.isMobileWidth =
       (window.innerWidth ||
         document.documentElement.clientWidth ||
@@ -62,7 +66,12 @@ export class SidebarComponent implements OnInit {
     this.dataService.getGenres('movie').subscribe({
       next: (result) => {
         result.genres.forEach((g: any) => {
-          this.genres.push(g);
+          const object = {
+            id: g.id,
+            name: g.name,
+            checked: false,
+          };
+          this.genres.push(object);
         });
       },
       error: (error) => {
@@ -72,7 +81,12 @@ export class SidebarComponent implements OnInit {
     this.dataService.getGenres('tv').subscribe({
       next: (result) => {
         result.genres.forEach((g: any) => {
-          this.genres.push(g);
+          const object = {
+            id: g.id,
+            name: g.name,
+            checked: false,
+          };
+          this.genres.push(object);
         });
       },
       error: (error) => {
@@ -83,13 +97,23 @@ export class SidebarComponent implements OnInit {
 
   getDates() {
     this.movies.forEach((movie: any) => {
-      this.year.add(movie.releaseYear);
+      const object = {
+        year: movie.releaseYear,
+        checked: false,
+      };
+      this.years.push(object);
     });
     this.series.forEach((series: any) => {
-      this.year.add(series.releaseYear);
+      const object = {
+        year: series.releaseYear,
+        checked: false,
+      };
+      this.years.push(object);
     });
-    let sortedDate = Array.from(this.year).sort((a: any, b: any) => a - b);
-    this.year = new Set(sortedDate);
+    let sortedDate = Array.from(this.years).sort(
+      (a: any, b: any) => a.year - b.year
+    );
+    this.years = sortedDate;
   }
 
   getActors() {
@@ -101,7 +125,11 @@ export class SidebarComponent implements OnInit {
               cast.known_for_department === 'Acting' &&
               cast.popularity >= 50
             ) {
-              this.actors.add(cast.name);
+              const object = {
+                id: cast.id,
+                name: cast.name,
+              };
+              this.actors.push(object);
             }
           });
         },
@@ -119,7 +147,11 @@ export class SidebarComponent implements OnInit {
               cast.known_for_department === 'Acting' &&
               cast.popularity >= 80
             ) {
-              this.actors.add(cast.name);
+              const object = {
+                id: cast.id,
+                name: cast.name,
+              };
+              this.actors.push(object);
             }
           });
         },
@@ -139,7 +171,11 @@ export class SidebarComponent implements OnInit {
               crew.known_for_department === 'Directing' &&
               crew.popularity >= 4
             ) {
-              this.directors.add(crew.name);
+              const object = {
+                id: crew.id,
+                name: crew.name,
+              };
+              this.directors.push(object);
             }
           });
         },
@@ -157,7 +193,11 @@ export class SidebarComponent implements OnInit {
               crew.known_for_department === 'Directing' &&
               crew.popularity >= 4
             ) {
-              this.directors.add(crew.name);
+              const object = {
+                id: crew.id,
+                name: crew.name,
+              };
+              this.directors.push(object);
             }
           });
         },
@@ -169,5 +209,14 @@ export class SidebarComponent implements OnInit {
   }
   closeFitlers() {
     this.toggleSidebar = !this.toggleSidebar;
+  }
+  resetFilter() {}
+  valueChanges(arr: any, el: any, $event: any) {
+    arr.map((id: any) => {
+      if (id === el) {
+        id.checked = $event.checked;
+        console.log(arr);
+      }
+    });
   }
 }

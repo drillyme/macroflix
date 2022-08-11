@@ -29,11 +29,11 @@ export class HomeComponent implements OnInit {
   }
 
   private filterMovies() {
-    this.dataService.filterForm.valueChanges.subscribe(data=> {
+    this.dataService.filterForm.valueChanges.subscribe((data) => {
       console.log(data);
       // TODO: write your logic for filtering the movies array.
       // prefer to make seperate movie card component
-    })
+    });
   }
 
   /**

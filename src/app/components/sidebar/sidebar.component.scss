@@ -33,6 +33,14 @@
       color: white;
     }
   }
+  & ::ng-deep {
+    .mat-option {
+      height: 29px;
+      padding: 0;
+      color: white;
+      font-size: 15px;
+    }
+  }
 }
 
 .filter {
