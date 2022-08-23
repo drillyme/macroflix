@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   filteredSet: any = [];
 
   filteredType: Set<string> = new Set();
+  filteredWatched: Set<string> = new Set();
   filteredRating: Set<rating> = new Set();
   filteredYear: Set<string> = new Set();
   filteredGenre: Set<number> = new Set();
@@ -42,6 +43,18 @@ export class HomeComponent implements OnInit {
         this.filteredType.add('movie');
       } else if (data.movie === false) {
         this.filteredType.delete('movie');
+      }
+
+      if (data.watched === true) {
+        this.filteredWatched.add('watched');
+      } else if (data.watched === false) {
+        this.filteredWatched.delete('watched');
+      }
+
+      if (data.notWatched === true) {
+        this.filteredWatched.add('notWatched');
+      } else if (data.notWatched === false) {
+        this.filteredWatched.delete('notWatched');
       }
 
       if (data.series === true) {
@@ -88,6 +101,8 @@ export class HomeComponent implements OnInit {
   getMoviesAndSeries() {
     this.filteredType.add('movie');
     this.filteredType.add('tv');
+    this.filteredWatched.add('watched');
+    this.filteredWatched.add('notWatched');
     this.filteredRating.add({ lowerBound: 0, upperBound: 60 });
     this.filteredRating.add({ lowerBound: 61, upperBound: 80 });
     this.filteredRating.add({ lowerBound: 81, upperBound: 90 });
@@ -304,7 +319,8 @@ export class HomeComponent implements OnInit {
       if (
         this.filteredType.has(m.type) &&
         this.filteredYear.has(m.releaseYear) &&
-        this.haveGenre(m.genreIds)
+        this.haveGenre(m.genreIds) &&
+        this.isWatched(m.isWatched)
       ) {
         return m;
       }
@@ -313,7 +329,8 @@ export class HomeComponent implements OnInit {
       if (
         this.filteredType.has(m.type) &&
         this.filteredYear.has(m.releaseYear) &&
-        this.haveGenre(m.genreIds)
+        this.haveGenre(m.genreIds) &&
+        this.isWatched(m.watched)
       ) {
         const series = this.filteredSet.find((m1: any) => m1.id === m.id);
         if (!series) {
@@ -330,5 +347,16 @@ export class HomeComponent implements OnInit {
     return true;
     //   console.log(genreIds);
     //   return false;
+  }
+
+  isWatched(watched: Boolean): Boolean {
+    if (this.filteredWatched.size === 2) {
+      return true;
+    } else if (this.filteredWatched.has('watched') && watched === true) {
+      return true;
+    } else if (this.filteredWatched.has('notWatched') && watched === false) {
+      return true;
+    }
+    return false;
   }
 }
