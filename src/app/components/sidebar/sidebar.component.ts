@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  SimpleChanges,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 
@@ -15,10 +22,10 @@ export class SidebarComponent implements OnInit {
   actors: any = [];
   directors: any = [];
 
-  moviesSize: number = 0;
-  seriesSize: number = 0;
-
   @Input() toggleSidebar: boolean = false;
+
+  @Output() typeToFilter = new EventEmitter();
+  @Output() resetFilters = new EventEmitter();
 
   isMobileWidth: boolean =
     (window.innerWidth ||
@@ -37,12 +44,10 @@ export class SidebarComponent implements OnInit {
   }
 
   ngDoCheck(): void {
-    this.moviesSize = this.movies.length;
-    this.seriesSize = this.series.length;
     this.genres = this.uniqBykeepLast(this.genres, (it: any) => it.id);
     this.years = this.uniqBykeepLast(this.years, (it: any) => it.year);
-    this.actors = this.uniqBykeepLast(this.actors, (it: any) => it.id);
     this.directors = this.uniqBykeepLast(this.directors, (it: any) => it.id);
+    this.actors = this.uniqBykeepLast(this.actors, (it: any) => it.id);
 
     this.isMobileWidth =
       (window.innerWidth ||
@@ -69,7 +74,7 @@ export class SidebarComponent implements OnInit {
           const object = {
             id: g.id,
             name: g.name,
-            checked: false,
+            checked: true,
           };
           this.genres.push(object);
         });
@@ -84,7 +89,7 @@ export class SidebarComponent implements OnInit {
           const object = {
             id: g.id,
             name: g.name,
-            checked: false,
+            checked: true,
           };
           this.genres.push(object);
         });
@@ -99,14 +104,14 @@ export class SidebarComponent implements OnInit {
     this.movies.forEach((movie: any) => {
       const object = {
         year: movie.releaseYear,
-        checked: false,
+        checked: true,
       };
       this.years.push(object);
     });
     this.series.forEach((series: any) => {
       const object = {
         year: series.releaseYear,
-        checked: false,
+        checked: true,
       };
       this.years.push(object);
     });
@@ -128,13 +133,11 @@ export class SidebarComponent implements OnInit {
               const object = {
                 id: cast.id,
                 name: cast.name,
+                checked: true,
               };
               this.actors.push(object);
             }
           });
-        },
-        error: (error: any) => {
-          console.log(error);
         },
       });
     });
@@ -150,13 +153,11 @@ export class SidebarComponent implements OnInit {
               const object = {
                 id: cast.id,
                 name: cast.name,
+                checked: true,
               };
               this.actors.push(object);
             }
           });
-        },
-        error: (error: any) => {
-          console.log(error);
         },
       });
     });
@@ -174,13 +175,11 @@ export class SidebarComponent implements OnInit {
               const object = {
                 id: crew.id,
                 name: crew.name,
+                checked: true,
               };
               this.directors.push(object);
             }
           });
-        },
-        error: (error: any) => {
-          console.log(error);
         },
       });
     });
@@ -196,13 +195,11 @@ export class SidebarComponent implements OnInit {
               const object = {
                 id: crew.id,
                 name: crew.name,
+                checked: true,
               };
               this.directors.push(object);
             }
           });
-        },
-        error: (error: any) => {
-          console.log(error);
         },
       });
     });
@@ -210,12 +207,38 @@ export class SidebarComponent implements OnInit {
   closeFitlers() {
     this.toggleSidebar = !this.toggleSidebar;
   }
-  resetFilter() {}
-  valueChanges(arr: any, el: any, $event: any) {
+  resetFilter() {
+    this.filterForm.setValue({
+      movie: true,
+      series: true,
+      watched: true,
+      notWatched: true,
+      ratingsArray: {
+        ratingLess60: true,
+        rating60To80: true,
+        rating80To90: true,
+        ratingMore90: true,
+      },
+    });
+    this.genres.forEach((g: any) => {
+      g.checked = true;
+    });
+    this.years.forEach((year: any) => {
+      year.checked = true;
+    });
+    this.actors.forEach((actor: any) => {
+      actor.checked = true;
+    });
+    this.directors.forEach((director: any) => {
+      director.checked = true;
+    });
+    this.resetFilters.emit();
+  }
+  valueChanges(arr: any, el: any, $event: any, type: string) {
     arr.map((id: any) => {
       if (id === el) {
         id.checked = $event.checked;
-        console.log(arr);
+        this.typeToFilter.emit({ id, type });
       }
     });
   }

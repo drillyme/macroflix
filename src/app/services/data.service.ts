@@ -20,10 +20,10 @@ export class DataService {
     watched: new FormControl(true),
     notWatched: new FormControl(true),
     ratingsArray: new FormGroup({
-      ratingLess60: new FormControl(false),
-      rating60To80: new FormControl(false),
-      rating80To90: new FormControl(false),
-      ratingMore90: new FormControl(false),
+      ratingLess60: new FormControl(true),
+      rating60To80: new FormControl(true),
+      rating80To90: new FormControl(true),
+      ratingMore90: new FormControl(true),
     }),
   });
 
