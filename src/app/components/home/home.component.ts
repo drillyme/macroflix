@@ -162,10 +162,7 @@ export class HomeComponent implements OnInit {
           this.dataService.getDetails('movie', movie.id).subscribe({
             next: (result) => {
               result.cast.forEach((cast: any) => {
-                if (
-                  cast.known_for_department === 'Acting' &&
-                  cast.popularity >= 60
-                ) {
+                if (cast.known_for_department === 'Acting') {
                   const object = {
                     id: cast.id,
                     name: cast.name,
@@ -177,10 +174,7 @@ export class HomeComponent implements OnInit {
               });
 
               result.crew.forEach((crew: any) => {
-                if (
-                  crew.known_for_department === 'Directing' &&
-                  crew.popularity >= 4
-                ) {
+                if (crew.known_for_department === 'Directing') {
                   const object = {
                     id: crew.id,
                     name: crew.name,
@@ -245,10 +239,7 @@ export class HomeComponent implements OnInit {
           this.dataService.getDetails('tv', movie.id).subscribe({
             next: (result: any) => {
               result.cast.forEach((cast: any) => {
-                if (
-                  cast.known_for_department === 'Acting' &&
-                  cast.popularity >= 60
-                ) {
+                if (cast.known_for_department === 'Acting') {
                   const object = {
                     id: cast.id,
                     name: cast.name,
@@ -260,10 +251,7 @@ export class HomeComponent implements OnInit {
               });
 
               result.crew.forEach((crew: any) => {
-                if (
-                  crew.known_for_department === 'Directing' &&
-                  crew.popularity >= 4
-                ) {
+                if (crew.known_for_department === 'Directing') {
                   const object = {
                     id: crew.id,
                     name: crew.name,
@@ -365,7 +353,7 @@ export class HomeComponent implements OnInit {
         this.filteredType.has(m.type) &&
         this.filteredYear.has(m.releaseYear) &&
         this.haveGenre(m.genreIds) &&
-        this.isWatched(m.watched) &&
+        this.isWatched(m.isWatched) &&
         this.haveRating(m.ratingValue) &&
         this.haveActors(m.actors) &&
         this.haveDirectors(m.directors)
