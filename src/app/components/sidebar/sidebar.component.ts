@@ -41,6 +41,8 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.getGenre();
     this.filterForm = this.dataService.filterForm;
+    this.getActors();
+    this.getDirectors();
   }
 
   ngDoCheck(): void {
@@ -55,12 +57,13 @@ export class SidebarComponent implements OnInit {
         document.body.clientWidth) < 480
         ? true
         : false;
+
+    this.getActors();
+    this.getDirectors();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.getDates();
-    this.getActors();
-    this.getDirectors();
   }
 
   uniqBykeepLast(data: any, key: any) {
@@ -123,86 +126,32 @@ export class SidebarComponent implements OnInit {
 
   getActors() {
     this.movies.forEach((movie: any) => {
-      this.dataService.getDetails('movie', movie.id).subscribe({
-        next: (result: any) => {
-          result.cast.forEach((cast: any) => {
-            if (
-              cast.known_for_department === 'Acting' &&
-              cast.popularity >= 50
-            ) {
-              const object = {
-                id: cast.id,
-                name: cast.name,
-                checked: true,
-              };
-              this.actors.push(object);
-            }
-          });
-        },
+      movie.actors.forEach((actor: any) => {
+        this.actors.push(actor);
       });
     });
 
     this.series.forEach((series: any) => {
-      this.dataService.getDetails('tv', series.id).subscribe({
-        next: (result: any) => {
-          result.cast.forEach((cast: any) => {
-            if (
-              cast.known_for_department === 'Acting' &&
-              cast.popularity >= 80
-            ) {
-              const object = {
-                id: cast.id,
-                name: cast.name,
-                checked: true,
-              };
-              this.actors.push(object);
-            }
-          });
-        },
+      series.actors.forEach((actor: any) => {
+        this.actors.push(actor);
       });
     });
+    this.actors = this.uniqBykeepLast(this.actors, (it: any) => it.id);
   }
 
   getDirectors() {
     this.movies.forEach((movie: any) => {
-      this.dataService.getDetails('movie', movie.id).subscribe({
-        next: (result: any) => {
-          result.crew.forEach((crew: any) => {
-            if (
-              crew.known_for_department === 'Directing' &&
-              crew.popularity >= 4
-            ) {
-              const object = {
-                id: crew.id,
-                name: crew.name,
-                checked: true,
-              };
-              this.directors.push(object);
-            }
-          });
-        },
+      movie.directors.forEach((director: any) => {
+        this.directors.push(director);
       });
     });
 
     this.series.forEach((series: any) => {
-      this.dataService.getDetails('tv', series.id).subscribe({
-        next: (result: any) => {
-          result.crew.forEach((crew: any) => {
-            if (
-              crew.known_for_department === 'Directing' &&
-              crew.popularity >= 4
-            ) {
-              const object = {
-                id: crew.id,
-                name: crew.name,
-                checked: true,
-              };
-              this.directors.push(object);
-            }
-          });
-        },
+      series.directors.forEach((director: any) => {
+        this.directors.push(director);
       });
     });
+    this.directors = this.uniqBykeepLast(this.directors, (it: any) => it.id);
   }
   closeFitlers() {
     this.toggleSidebar = !this.toggleSidebar;

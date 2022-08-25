@@ -27,6 +27,7 @@
   display: flex;
   flex-wrap: wrap;
   margin: 30px 30px;
+  height: fit-content;
 
   & > div {
     display: flex;
@@ -92,6 +93,11 @@
 }
 
 @media (max-width: 480px) {
+  .movies {
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
   .content-type {
     display: none;
   }

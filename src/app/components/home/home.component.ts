@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { AppConstants } from '../../app.constant';
 import { FormGroup } from '@angular/forms';
-import { rating, splicedData } from 'src/app/model/genres';
+import { splicedData } from 'src/app/model/genres';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
 
   filteredType: Set<string> = new Set();
   filteredWatched: Set<string> = new Set();
-  filteredRating: Set<rating> = new Set();
+  filteredRating: Set<number> = new Set();
   filteredYear: Set<string> = new Set();
   filteredGenre: Set<number> = new Set();
   filteredActor: Set<number> = new Set();
@@ -64,27 +64,35 @@ export class HomeComponent implements OnInit {
       }
 
       if (data['ratingsArray']!.ratingLess60 === true) {
-        this.filteredRating.add({ lowerBound: 0, upperBound: 60 });
+        this.filteredRating.add(0);
+        this.filteredRating.add(60);
       } else if (data['ratingsArray']!.ratingLess60 === false) {
-        this.filteredRating.delete({ lowerBound: 0, upperBound: 60 });
+        this.filteredRating.delete(0);
+        this.filteredRating.delete(60);
       }
 
       if (data['ratingsArray']!.rating60To80) {
-        this.filteredRating.add({ lowerBound: 61, upperBound: 80 });
+        this.filteredRating.add(61);
+        this.filteredRating.add(80);
       } else if (data['ratingsArray']!.rating60To80 === false) {
-        this.filteredRating.delete({ lowerBound: 61, upperBound: 80 });
+        this.filteredRating.delete(61);
+        this.filteredRating.delete(80);
       }
 
       if (data['ratingsArray']!.rating80To90 === true) {
-        this.filteredRating.add({ lowerBound: 81, upperBound: 90 });
+        this.filteredRating.add(81);
+        this.filteredRating.add(90);
       } else if (data['ratingsArray']!.rating80To90 === false) {
-        this.filteredRating.delete({ lowerBound: 81, upperBound: 90 });
+        this.filteredRating.delete(81);
+        this.filteredRating.delete(90);
       }
 
       if (data['ratingsArray']!.ratingMore90) {
-        this.filteredRating.add({ lowerBound: 91, upperBound: 100 });
+        this.filteredRating.add(91);
+        this.filteredRating.add(100);
       } else if (data['ratingsArray']!.ratingMore90 === false) {
-        this.filteredRating.add({ lowerBound: 91, upperBound: 100 });
+        this.filteredRating.delete(91);
+        this.filteredRating.delete(100);
       }
       this.filterData();
     });
@@ -103,10 +111,14 @@ export class HomeComponent implements OnInit {
     this.filteredType.add('tv');
     this.filteredWatched.add('watched');
     this.filteredWatched.add('notWatched');
-    this.filteredRating.add({ lowerBound: 0, upperBound: 60 });
-    this.filteredRating.add({ lowerBound: 61, upperBound: 80 });
-    this.filteredRating.add({ lowerBound: 81, upperBound: 90 });
-    this.filteredRating.add({ lowerBound: 91, upperBound: 100 });
+    this.filteredRating.add(0);
+    this.filteredRating.add(60);
+    this.filteredRating.add(61);
+    this.filteredRating.add(80);
+    this.filteredRating.add(81);
+    this.filteredRating.add(90);
+    this.filteredRating.add(91);
+    this.filteredRating.add(100);
 
     this.dataService.getData('movie').subscribe({
       next: (result) => {
@@ -152,9 +164,14 @@ export class HomeComponent implements OnInit {
               result.cast.forEach((cast: any) => {
                 if (
                   cast.known_for_department === 'Acting' &&
-                  cast.popularity >= 50
+                  cast.popularity >= 60
                 ) {
-                  splicedMovies.actors.push(cast.id);
+                  const object = {
+                    id: cast.id,
+                    name: cast.name,
+                    checked: true,
+                  };
+                  splicedMovies.actors.push(object);
                   this.filteredActor.add(cast.id);
                 }
               });
@@ -164,7 +181,12 @@ export class HomeComponent implements OnInit {
                   crew.known_for_department === 'Directing' &&
                   crew.popularity >= 4
                 ) {
-                  splicedMovies.directors.push(crew.id);
+                  const object = {
+                    id: crew.id,
+                    name: crew.name,
+                    checked: true,
+                  };
+                  splicedMovies.directors.push(object);
                   this.filteredDirector.add(crew.id);
                 }
               });
@@ -225,9 +247,14 @@ export class HomeComponent implements OnInit {
               result.cast.forEach((cast: any) => {
                 if (
                   cast.known_for_department === 'Acting' &&
-                  cast.popularity >= 80
+                  cast.popularity >= 60
                 ) {
-                  splicedSeries.actors.push(cast.id);
+                  const object = {
+                    id: cast.id,
+                    name: cast.name,
+                    checked: true,
+                  };
+                  splicedSeries.actors.push(object);
                   this.filteredActor.add(cast.id);
                 }
               });
@@ -237,7 +264,12 @@ export class HomeComponent implements OnInit {
                   crew.known_for_department === 'Directing' &&
                   crew.popularity >= 4
                 ) {
-                  splicedSeries.directors.push(crew.id);
+                  const object = {
+                    id: crew.id,
+                    name: crew.name,
+                    checked: true,
+                  };
+                  splicedSeries.directors.push(object);
                   this.filteredDirector.add(crew.id);
                 }
               });
@@ -282,7 +314,7 @@ export class HomeComponent implements OnInit {
   }
 
   filterHandler(valueEmiited: any) {
-    console.log(valueEmiited);
+    // console.log(valueEmiited);
     const { id, type } = valueEmiited;
     if (type === 'year') {
       if (id.checked === true) {
@@ -320,7 +352,10 @@ export class HomeComponent implements OnInit {
         this.filteredType.has(m.type) &&
         this.filteredYear.has(m.releaseYear) &&
         this.haveGenre(m.genreIds) &&
-        this.isWatched(m.isWatched)
+        this.isWatched(m.isWatched) &&
+        this.haveRating(m.ratingValue) &&
+        this.haveActors(m.actors) &&
+        this.haveDirectors(m.directors)
       ) {
         return m;
       }
@@ -330,7 +365,10 @@ export class HomeComponent implements OnInit {
         this.filteredType.has(m.type) &&
         this.filteredYear.has(m.releaseYear) &&
         this.haveGenre(m.genreIds) &&
-        this.isWatched(m.watched)
+        this.isWatched(m.watched) &&
+        this.haveRating(m.ratingValue) &&
+        this.haveActors(m.actors) &&
+        this.haveDirectors(m.directors)
       ) {
         const series = this.filteredSet.find((m1: any) => m1.id === m.id);
         if (!series) {
@@ -340,13 +378,14 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  haveGenre(genreIds: Array<number>): Boolean {
-    if (this.filteredGenre.size === 0) {
-      return false;
-    }
-    return true;
-    //   console.log(genreIds);
-    //   return false;
+  haveGenre(genreIds: Array<number>): any {
+    let genrePreset = false;
+    genreIds.forEach((genreId: number) => {
+      if (this.filteredGenre.has(genreId)) {
+        genrePreset = true;
+      }
+    });
+    return genrePreset;
   }
 
   isWatched(watched: Boolean): Boolean {
@@ -358,5 +397,37 @@ export class HomeComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  haveRating(ratingValue: number): Boolean {
+    if (
+      Math.min(...this.filteredRating) <= ratingValue &&
+      Math.max(...this.filteredRating) >= ratingValue
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  haveActors(actors: Array<any>): boolean {
+    let present = false;
+    actors.forEach((actor: any) => {
+      if (this.filteredActor.has(actor.id)) {
+        present = true;
+      }
+    });
+    return present;
+  }
+
+  haveDirectors(directors: Array<any>): boolean {
+    let present = false;
+    directors.forEach((director: any) => {
+      if (this.filteredDirector.has(director.id)) {
+        present = true;
+      }
+    });
+
+    return present;
   }
 }

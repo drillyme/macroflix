@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AppConstants } from '../app.constant';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -47,7 +47,7 @@ export class DataService {
   public getDetails(type: string, id: string): Observable<any> {
     return this.http.get<any>(
       this.baseApiUrl +
-        `/${type}/${id}//credits?api_key=${environment.apiKey}&language=en-US`,
+        `${type}/${id}/credits?api_key=${environment.apiKey}&language=en-US`,
       { headers }
     );
   }

@@ -8,8 +8,8 @@ export interface splicedData {
   id: number;
   genreIds: Array<number>;
   title: string;
-  actors: Array<number>;
-  directors: Array<number>;
+  actors: Array<any>;
+  directors: Array<any>;
   poster: string;
   ratings: Array<any>;
   ratingValue: number;
@@ -17,9 +17,4 @@ export interface splicedData {
   type: string;
   isWatched: Boolean;
   isFav: Boolean;
-}
-
-export interface rating {
-  lowerBound: number;
-  upperBound: number;
 }
