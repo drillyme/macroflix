@@ -14,7 +14,9 @@
       </button>
     </mat-panel-title>
     <mat-panel-title class="filter">
-      <button mat-button class="menu-button">Reset Filters</button>
+      <button mat-button class="menu-button" (click)="resetFilter()">
+        Reset Filters
+      </button>
     </mat-panel-title>
     <mat-expansion-panel
       [expanded]="!isMobileWidth"
@@ -25,27 +27,32 @@
       </mat-expansion-panel-header>
       <div class="input-group">
         <mat-checkbox formControlName="movie"></mat-checkbox>
-        <label for="">Movie({{ this.moviesSize }})</label>
+        <label for="">Movie</label>
       </div>
       <div class="input-group">
         <mat-checkbox formControlName="series"></mat-checkbox>
-        <label for="">Series({{ this.seriesSize }})</label>
+        <label for="">Series</label>
       </div>
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration"> Year </mat-panel-title>
       </mat-expansion-panel-header>
-      <ng-container *ngFor="let year of year">
-        <div class="input-group">
-          <mat-checkbox class="example-margin"></mat-checkbox>
-          <label for="">{{ year }}</label>
-        </div>
-      </ng-container>
+      <div class="input-group">
+        <mat-option *ngFor="let year of years">
+          <mat-checkbox
+            class="example-margin"
+            [checked]="year.checked"
+            (change)="valueChanges(years, year, $event, 'year')"
+            >{{ year.year }}
+          </mat-checkbox>
+        </mat-option>
+      </div>
     </mat-expansion-panel>
     <mat-expansion-panel
       [expanded]="!isMobileWidth"
       [disabled]="!isMobileWidth"
+      formGroupName="ratingsArray"
     >
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration">
@@ -53,20 +60,32 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for=""> < 60 (5) </label>
+        <mat-checkbox
+          class="example-margin"
+          formControlName="ratingLess60"
+        ></mat-checkbox>
+        <label for=""> < 60 </label>
       </div>
       <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for=""> Between 60 & 50 (5)</label>
+        <mat-checkbox
+          class="example-margin"
+          formControlName="rating60To80"
+        ></mat-checkbox>
+        <label for=""> Between 60 & 80 </label>
       </div>
       <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for="">Between 60 & 50 (6)</label>
+        <mat-checkbox
+          class="example-margin"
+          formControlName="rating80To90"
+        ></mat-checkbox>
+        <label for="">Between 80 & 90 </label>
       </div>
       <div class="input-group">
-        <mat-checkbox class="example-margin"></mat-checkbox>
-        <label for="">> 90 (5)</label>
+        <mat-checkbox
+          class="example-margin"
+          formControlName="ratingMore90"
+        ></mat-checkbox>
+        <label for=""> > 90 </label>
       </div>
     </mat-expansion-panel>
     <mat-expansion-panel
@@ -79,12 +98,18 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="input-group">
-        <mat-checkbox class="example-margin watched"></mat-checkbox>
-        <label for=""></label>
+        <mat-checkbox
+          class="example-margin watched"
+          formControlName="watched"
+        ></mat-checkbox>
+        <label for="">watched</label>
       </div>
       <div class="input-group">
-        <mat-checkbox class="example-margin watched"></mat-checkbox>
-        <label for=""></label>
+        <mat-checkbox
+          class="example-margin watched"
+          formControlName="notWatched"
+        ></mat-checkbox>
+        <label for="">notWatched</label>
       </div>
     </mat-expansion-panel>
     <mat-expansion-panel
@@ -102,30 +127,38 @@
       </div>
       <div class="input-group">
         <mat-checkbox class="example-margin watched"></mat-checkbox>
-        <label for=""></label>
       </div>
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration"> Genre </mat-panel-title>
       </mat-expansion-panel-header>
-      <ng-container *ngFor="let genre of genres">
-        <div class="input-group">
-          <mat-checkbox class="example-margin"></mat-checkbox>
-          <label for=""> {{ genre.name }} </label>
-        </div>
-      </ng-container>
+      <div class="input-group">
+        <mat-option *ngFor="let genre of genres">
+          <mat-checkbox
+            class="example-margin"
+            [checked]="genre.checked"
+            (change)="valueChanges(genres, genre, $event, 'genre')"
+            >{{ genre.name }}</mat-checkbox
+          >
+        </mat-option>
+      </div>
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title class="patient-registration"> Actors </mat-panel-title>
       </mat-expansion-panel-header>
-      <ng-container *ngFor="let actor of actors">
-        <div class="input-group">
-          <mat-checkbox class="example-margin"></mat-checkbox>
-          <label for=""> {{ actor }}</label>
-        </div>
-      </ng-container>
+      <div class="input-group">
+        <mat-option *ngFor="let actor of actors">
+          <mat-checkbox
+            class="example-margin"
+            [checked]="actor.checked"
+            (change)="valueChanges(actors, actor, $event, 'actor')"
+          >
+            {{ actor.name }}</mat-checkbox
+          >
+        </mat-option>
+      </div>
     </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -133,13 +166,16 @@
           Directors
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <ng-container *ngFor="let director of directors">
-        <div class="input-group">
-          <mat-checkbox class="example-margin"></mat-checkbox>
-          <label for=""> {{ director }} </label>
-        </div>
-      </ng-container>
+      <div class="input-group">
+        <mat-option *ngFor="let director of directors">
+          <mat-checkbox
+            class="example-margin"
+            [checked]="director.checked"
+            (change)="valueChanges(directors, director, $event, 'director')"
+            >{{ director.name }}</mat-checkbox
+          >
+        </mat-option>
+      </div>
     </mat-expansion-panel>
   </mat-sidenav>
-  <!-- </div> -->
 </div>

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AppConstants } from '../app.constant';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -15,9 +15,17 @@ export class DataService {
 
   // TODO: add more dynamic controls or formArray
   filterForm = new FormGroup({
-    movie : new FormControl(true),
-    series: new FormControl(true)
-  })
+    movie: new FormControl(true),
+    series: new FormControl(true),
+    watched: new FormControl(true),
+    notWatched: new FormControl(true),
+    ratingsArray: new FormGroup({
+      ratingLess60: new FormControl(true),
+      rating60To80: new FormControl(true),
+      rating80To90: new FormControl(true),
+      ratingMore90: new FormControl(true),
+    }),
+  });
 
   constructor(private http: HttpClient) {}
 
@@ -39,7 +47,7 @@ export class DataService {
   public getDetails(type: string, id: string): Observable<any> {
     return this.http.get<any>(
       this.baseApiUrl +
-        `/${type}/${id}//credits?api_key=${environment.apiKey}&language=en-US`,
+        `${type}/${id}/credits?api_key=${environment.apiKey}&language=en-US`,
       { headers }
     );
   }

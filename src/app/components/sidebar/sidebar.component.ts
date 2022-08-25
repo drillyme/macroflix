@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  SimpleChanges,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DataService } from '../../services/data.service';
 
@@ -11,14 +18,14 @@ export class SidebarComponent implements OnInit {
   @Input() movies: any = [];
   @Input() series: any = [];
   genres: any = [];
-  year: Set<String> = new Set();
-  actors: Set<String> = new Set();
-  directors: Set<String> = new Set();
-
-  moviesSize: number = 0;
-  seriesSize: number = 0;
+  years: any = [];
+  actors: any = [];
+  directors: any = [];
 
   @Input() toggleSidebar: boolean = false;
+
+  @Output() typeToFilter = new EventEmitter();
+  @Output() resetFilters = new EventEmitter();
 
   isMobileWidth: boolean =
     (window.innerWidth ||
@@ -34,24 +41,29 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.getGenre();
     this.filterForm = this.dataService.filterForm;
+    this.getActors();
+    this.getDirectors();
   }
 
   ngDoCheck(): void {
-    this.moviesSize = this.movies.length;
-    this.seriesSize = this.series.length;
     this.genres = this.uniqBykeepLast(this.genres, (it: any) => it.id);
+    this.years = this.uniqBykeepLast(this.years, (it: any) => it.year);
+    this.directors = this.uniqBykeepLast(this.directors, (it: any) => it.id);
+    this.actors = this.uniqBykeepLast(this.actors, (it: any) => it.id);
+
     this.isMobileWidth =
       (window.innerWidth ||
         document.documentElement.clientWidth ||
         document.body.clientWidth) < 480
         ? true
         : false;
+
+    this.getActors();
+    this.getDirectors();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.getDates();
-    this.getActors();
-    this.getDirectors();
   }
 
   uniqBykeepLast(data: any, key: any) {
@@ -62,7 +74,12 @@ export class SidebarComponent implements OnInit {
     this.dataService.getGenres('movie').subscribe({
       next: (result) => {
         result.genres.forEach((g: any) => {
-          this.genres.push(g);
+          const object = {
+            id: g.id,
+            name: g.name,
+            checked: true,
+          };
+          this.genres.push(object);
         });
       },
       error: (error) => {
@@ -72,7 +89,12 @@ export class SidebarComponent implements OnInit {
     this.dataService.getGenres('tv').subscribe({
       next: (result) => {
         result.genres.forEach((g: any) => {
-          this.genres.push(g);
+          const object = {
+            id: g.id,
+            name: g.name,
+            checked: true,
+          };
+          this.genres.push(object);
         });
       },
       error: (error) => {
@@ -83,91 +105,90 @@ export class SidebarComponent implements OnInit {
 
   getDates() {
     this.movies.forEach((movie: any) => {
-      this.year.add(movie.releaseYear);
+      const object = {
+        year: movie.releaseYear,
+        checked: true,
+      };
+      this.years.push(object);
     });
     this.series.forEach((series: any) => {
-      this.year.add(series.releaseYear);
+      const object = {
+        year: series.releaseYear,
+        checked: true,
+      };
+      this.years.push(object);
     });
-    let sortedDate = Array.from(this.year).sort((a: any, b: any) => a - b);
-    this.year = new Set(sortedDate);
+    let sortedDate = Array.from(this.years).sort(
+      (a: any, b: any) => a.year - b.year
+    );
+    this.years = sortedDate;
   }
 
   getActors() {
     this.movies.forEach((movie: any) => {
-      this.dataService.getDetails('movie', movie.id).subscribe({
-        next: (result: any) => {
-          result.cast.forEach((cast: any) => {
-            if (
-              cast.known_for_department === 'Acting' &&
-              cast.popularity >= 50
-            ) {
-              this.actors.add(cast.name);
-            }
-          });
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
+      movie.actors.forEach((actor: any) => {
+        this.actors.push(actor);
       });
     });
 
     this.series.forEach((series: any) => {
-      this.dataService.getDetails('tv', series.id).subscribe({
-        next: (result: any) => {
-          result.cast.forEach((cast: any) => {
-            if (
-              cast.known_for_department === 'Acting' &&
-              cast.popularity >= 80
-            ) {
-              this.actors.add(cast.name);
-            }
-          });
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
+      series.actors.forEach((actor: any) => {
+        this.actors.push(actor);
       });
     });
+    this.actors = this.uniqBykeepLast(this.actors, (it: any) => it.id);
   }
 
   getDirectors() {
     this.movies.forEach((movie: any) => {
-      this.dataService.getDetails('movie', movie.id).subscribe({
-        next: (result: any) => {
-          result.crew.forEach((crew: any) => {
-            if (
-              crew.known_for_department === 'Directing' &&
-              crew.popularity >= 4
-            ) {
-              this.directors.add(crew.name);
-            }
-          });
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
+      movie.directors.forEach((director: any) => {
+        this.directors.push(director);
       });
     });
 
     this.series.forEach((series: any) => {
-      this.dataService.getDetails('tv', series.id).subscribe({
-        next: (result: any) => {
-          result.crew.forEach((crew: any) => {
-            if (
-              crew.known_for_department === 'Directing' &&
-              crew.popularity >= 4
-            ) {
-              this.directors.add(crew.name);
-            }
-          });
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
+      series.directors.forEach((director: any) => {
+        this.directors.push(director);
       });
     });
+    this.directors = this.uniqBykeepLast(this.directors, (it: any) => it.id);
   }
   closeFitlers() {
     this.toggleSidebar = !this.toggleSidebar;
+  }
+  resetFilter() {
+    this.filterForm.setValue({
+      movie: true,
+      series: true,
+      watched: true,
+      notWatched: true,
+      ratingsArray: {
+        ratingLess60: true,
+        rating60To80: true,
+        rating80To90: true,
+        ratingMore90: true,
+      },
+    });
+    this.genres.forEach((g: any) => {
+      g.checked = true;
+    });
+    this.years.forEach((year: any) => {
+      year.checked = true;
+    });
+    this.actors.forEach((actor: any) => {
+      actor.checked = true;
+    });
+    this.directors.forEach((director: any) => {
+      director.checked = true;
+    });
+    this.resetFilters.emit();
+  }
+  valueChanges(arr: any, el: any, $event: any, type: string) {
+    arr.map((id: any) => {
+      if (id === el) {
+        id.checked = $event.checked;
+        this.typeToFilter.emit({ id, type });
+      }
+    });
   }
 }

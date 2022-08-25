@@ -1,5 +1,5 @@
 <h3 class="content-type">
-  Movies <span>({{ movies.length + series.length }})</span>
+  Movies <span>({{ movies.length }})</span>
 </h3>
 <div class="arrow-down" (click)="arrowDown()">
   <img src="assets/images/down-arrow.png" alt="Arrow Down" />
@@ -9,9 +9,11 @@
     [movies]="movies"
     [series]="series"
     [toggleSidebar]="sidebarToggle"
+    (typeToFilter)="filterHandler($event)"
+    (resetFilters)="getMoviesAndSeries()"
   ></app-sidebar>
   <div class="movies">
-    <ng-container *ngFor="let movie of movies">
+    <ng-container *ngFor="let movie of filteredSet">
       <div class="movie" [ngClass]="getClassOfMovie(movie)">
         <app-movie-tile
           [id]="movie.id"
@@ -21,20 +23,6 @@
           [isFav]="movie.isFav"
           (favClick)="onFavClick(movie)"
           (watchedClick)="onWatchedClick(movie)"
-        >
-        </app-movie-tile>
-      </div>
-    </ng-container>
-    <ng-container *ngFor="let serie of series">
-      <div class="movie" [ngClass]="getClassOfMovie(serie)">
-        <app-movie-tile
-          [id]="serie.id"
-          [ImageUrl]="serie.poster"
-          [ratings]="serie.ratings"
-          [isWatched]="serie.isWatched"
-          [isFav]="serie.isFav"
-          (favClick)="onFavClick(serie)"
-          (watchedClick)="onWatchedClick(serie)"
         >
         </app-movie-tile>
       </div>

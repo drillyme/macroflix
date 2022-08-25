@@ -33,6 +33,14 @@
       color: white;
     }
   }
+  & ::ng-deep {
+    .mat-option {
+      height: 29px;
+      padding: 0;
+      color: white;
+      font-size: 15px;
+    }
+  }
 }
 
 .filter {
@@ -90,10 +98,11 @@ mat-sidenav {
 @media (max-width: 480px) {
   .sidebar {
     position: absolute;
+    top: -1800px;
+
     margin: 0;
     width: 100%;
     transition: all 1s ease-in-out;
-    transform: translatey(-125%);
     & mat-expansion-panel {
       width: 94%;
       margin: auto;
@@ -128,6 +137,6 @@ mat-sidenav {
     }
   }
   .open {
-    transform: translateY(-10%);
+    top: 68px;
   }
 }
