@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
   movies: any = [];
   series: any = [];
   filteredSet: any = [];
+  varType: string = 'Movies&Series';
 
   filteredType: Set<string> = new Set();
   filteredWatched: Set<string> = new Set();
@@ -39,6 +40,16 @@ export class HomeComponent implements OnInit {
 
   private filterMovies() {
     this.dataService.filterForm?.valueChanges.subscribe((data) => {
+      if (data.movie === true && data.series === true) {
+        this.varType = 'Movies&Series';
+      } else if (data.movie === true && data.series === false) {
+        this.varType = 'Movies';
+      } else if (data.movie === false && data.series === true) {
+        this.varType = 'Series';
+      } else {
+        this.varType = '';
+      }
+
       if (data.movie === true) {
         this.filteredType.add('movie');
       } else if (data.movie === false) {
